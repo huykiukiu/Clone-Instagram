@@ -1,8 +1,8 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import MainLayout from "./layouts/MainLayout";
-import AuthMiddleware from "./middlewares/authMiddleware";
+import AuthMiddleware from "./middlewares/AuthMiddleware";
+import PublicMiddleware from "./middlewares/PublicMiddleware";
 export default function App() {
   return (
     <div>
@@ -10,7 +10,9 @@ export default function App() {
         <Route element={<AuthMiddleware />}>
           <Route index element={<MainLayout />} />
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route element={<PublicMiddleware />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
       </Routes>
     </div>
   );

@@ -6,12 +6,17 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../stores/authStore";
 export default function UserMenu() {
+  const navigate = useNavigate();
+  const logoutRequest = useAuth((state) => state.logout);
+  const handleLogout = async () => {
+    await logoutRequest();
+    navigate("/login");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,8 +38,8 @@ export default function UserMenu() {
           <DropdownMenuItem className="cursor-pointer">
             <Sun /> <span>Chuyển chế độ</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <LogOut className="text-red-500" />{" "}
+          <DropdownMenuItem className="cursor-pointer" onSelect={handleLogout}>
+            <LogOut className="text-red-500" />
             <span className="text-red-500">Đăng xuất</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>

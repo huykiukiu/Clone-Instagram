@@ -12,8 +12,6 @@ import { useAuth } from "../stores/authStore";
 import UserMenu from "../components/UserMenu";
 export default function MainLayout() {
   const user = useAuth((state) => state.user);
-  console.log(user);
-
   return (
     <div className="min-h-dvh bg-black flex">
       <div className="w-full max-w-80 border-r border-r-gray-800">
