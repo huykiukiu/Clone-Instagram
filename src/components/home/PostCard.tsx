@@ -48,6 +48,8 @@ type LikePostResponse = {
 };
 import { useAuth } from "../../stores/authStore";
 import { cn } from "../../lib/utils";
+import PostDetail from "./PostDetail";
+import { useState } from "react";
 const likePostAPI = async (postId: string): Promise<LikePostResponse> => {
   const token = useAuth.getState().token;
   const response = await fetch(
@@ -62,6 +64,7 @@ const likePostAPI = async (postId: string): Promise<LikePostResponse> => {
   return response.json();
 };
 export default function PostCard({ data }: PostCardProps) {
+  const [openPostId, setOpenPostId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (postId: string) => likePostAPI(postId),
@@ -119,7 +122,10 @@ export default function PostCard({ data }: PostCardProps) {
                 <span>{post.likes}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MessageCircle className="text-white cursor-pointer" />
+                <MessageCircle
+                  className="text-white cursor-pointer"
+                  onClick={() => setOpenPostId(post._id)}
+                />
                 <span>{post.comments}</span>
               </div>
 
@@ -131,6 +137,11 @@ export default function PostCard({ data }: PostCardProps) {
             <span className="font-semibold">{post.userId?.username}</span>
             <p>{post.caption}</p>
           </div>
+          <PostDetail
+            post={post}
+            openPostDetail={openPostId === post._id}
+            onSetOpenPostDetail={() => setOpenPostId(null)}
+          />
         </div>
       ))}
     </>
