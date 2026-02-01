@@ -1,3 +1,59 @@
+import { useQuery } from "@tanstack/react-query";
+import { postCacheKey } from "../cache/postCacheKey";
+import PostCard from "../components/home/PostCard";
+
+export type PostUser = {
+  _id: string;
+  username: string;
+} | null;
+
+export type Post = {
+  _id: string;
+  userId: PostUser;
+  caption: string;
+  image: string | null;
+  video: string | null;
+  mediaType: "image" | "video";
+  likes: number;
+  comments: number;
+  likedBy: string[];
+  savedBy: string[];
+  createdAt: string;
+  isLiked: boolean;
+  isSaved: boolean;
+};
+
+export type PostFeedData = {
+  posts: Post[];
+  total: number;
+  limit: number;
+  offset: number;
+  hasMore: boolean;
+};
+
+export type PostFeedResponse = {
+  message: string;
+  data: PostFeedData;
+  success: boolean;
+};
+
+const getPosts = async (): Promise<PostFeedResponse> => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/api/posts/feed`,
+  );
+  return response.json();
+};
 export default function Home() {
-  return <div className="text-white">Home Page</div>;
+  const { data, isLoading } = useQuery({
+    queryKey: postCacheKey.list,
+    queryFn: getPosts,
+  });
+  console.log(data?.data.posts);
+  if (isLoading) return <div>Loading...</div>;
+  if (!data) return null;
+  return (
+    <div className="flex-1 text-white px-10 py-9">
+      <PostCard data={data?.data.posts} />
+    </div>
+  );
 }

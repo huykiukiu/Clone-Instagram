@@ -1,6 +1,6 @@
 export default function SearchPanel() {
   return (
-    <div className="min-h-dvh w-full max-w-80 border-r border-r-gray-800 px-4 py-9">
+    <div className="min-h-dvh w-full max-w-80 border-r border-r-gray-800 px-4 py-9 fixed">
       <h1 className="text-xl font-bold text-white mb-5">Tìm kiếm</h1>
       <input
         type="search"
