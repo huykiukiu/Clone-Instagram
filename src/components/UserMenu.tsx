@@ -10,7 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../stores/authStore";
-export default function UserMenu() {
+type SidebarPanel = "search" | "notification" | "message" | null;
+export default function UserMenu({
+  activePanel,
+  onSetActivePanel,
+}: {
+  activePanel: string | null;
+  onSetActivePanel: React.Dispatch<React.SetStateAction<SidebarPanel>>;
+}) {
   const navigate = useNavigate();
   const logoutRequest = useAuth((state) => state.logout);
   const handleLogout = async () => {
@@ -19,11 +26,17 @@ export default function UserMenu() {
   };
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex items-center gap-3 text-white cursor-pointer px-2 py-2 rounded-md hover:bg-gray-900 w-fit focus-visible:ring-0 select-none">
-          <Menu />
-          <span>Xem thêm</span>
-        </div>
+      <DropdownMenuTrigger asChild onClick={() => onSetActivePanel(null)}>
+        {activePanel ? (
+          <div className="ml-3">
+            <Menu className="text-white cursor-pointer" />
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 text-white cursor-pointer px-2 py-2 rounded-md hover:bg-gray-900 w-fit focus-visible:ring-0 select-none">
+            <Menu />
+            <span>Xem thêm</span>
+          </div>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-52"

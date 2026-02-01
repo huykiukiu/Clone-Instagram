@@ -18,12 +18,6 @@ type UserStore = {
   login: (data: LoginPayload) => Promise<void>;
   logout: () => Promise<void>;
 };
-type LogoutResponse = {
-  success: boolean;
-  message: string;
-  data: null;
-};
-
 export const useAuth = create<UserStore>((set, get) => ({
   token: localStorage.getItem("accessToken"),
   user: JSON.parse(localStorage.getItem("user") ?? "null"),
@@ -52,6 +46,10 @@ export const useAuth = create<UserStore>((set, get) => ({
   },
   logout: async () => {
     try {
+      set({ token: null, user: null });
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
       const res = await fetch(`https://instagram.f8team.dev/api/auth/logout`, {
         method: "POST",
         headers: {
@@ -64,13 +62,6 @@ export const useAuth = create<UserStore>((set, get) => ({
       });
       if (!res.ok) {
         throw new Error("Fetch api lỗi");
-      }
-      const data: LogoutResponse = await res.json();
-      if (data.success) {
-        set({ token: null, user: null });
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user");
       }
     } catch (error) {
       console.log(error);
