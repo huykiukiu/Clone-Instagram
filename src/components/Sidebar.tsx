@@ -28,11 +28,11 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
     <aside
       className={
         activePanel
-          ? "w-full max-w-20 border-r border-r-gray-800"
-          : "w-full max-w-80 border-r border-r-gray-800"
+          ? "w-full max-w-20 border-r border-r-gray-800 fixed top-0 left-0"
+          : "w-full max-w-80 border-r border-r-gray-800 fixed top-0 left-0"
       }
     >
-      <div className="px-4 py-10 h-full flex flex-col">
+      <div className="px-4 py-10 min-h-screen flex flex-col">
         <NavLink to="/" className="mb-5">
           {activePanel ? (
             <>

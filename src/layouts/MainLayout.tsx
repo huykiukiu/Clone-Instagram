@@ -12,6 +12,10 @@ import { useState } from "react";
 // import { useAuth } from "../stores/authStore";
 // import UserMenu from "../components/UserMenu";
 import Sidebar from "../components/Sidebar";
+import NotificationPanel from "../components/NotificationPanel";
+import MessagePanel from "../components/MessagePanel";
+import { Outlet } from "react-router-dom";
+import SearchPanel from "../components/SearchPanel";
 type SidebarPanel = "search" | "notification" | "message" | null;
 export default function MainLayout() {
   const [activePanel, setActivePanel] = useState<SidebarPanel>(null);
@@ -24,7 +28,7 @@ export default function MainLayout() {
   //   }
   // };
   return (
-    <div className="min-h-dvh bg-black flex">
+    <div className="min-h-dvh bg-black flex pl-20">
       {/* <aside
         className={
           activePanel
@@ -188,6 +192,12 @@ export default function MainLayout() {
         </div>
       </aside> */}
       <Sidebar activePanel={activePanel} onSetActivePanel={setActivePanel} />
+      <div className="w-full max-w-80">
+        {activePanel === "notification" && <NotificationPanel />}
+        {activePanel === "search" && <SearchPanel />}
+        {activePanel === "message" && <MessagePanel />}
+      </div>
+      <Outlet />
     </div>
   );
 }
