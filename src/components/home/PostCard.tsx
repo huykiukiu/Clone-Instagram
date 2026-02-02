@@ -142,12 +142,13 @@ export default function PostCard({ data }: PostCardProps) {
           </div>
           <div className="text-white flex items-center gap-2">
             <span className="font-semibold">{post.userId?.username}</span>
-            <p>{post.caption}</p>
+            <p className="font-semibold">{post.caption}</p>
           </div>
           <PostDetail
             post={post}
             openPostDetail={openPostId === post._id}
             onSetOpenPostDetail={() => setOpenPostId(null)}
+            // onLikePost={() => mutation.}
           />
         </div>
       ))}

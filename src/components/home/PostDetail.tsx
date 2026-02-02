@@ -1,4 +1,10 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { instance } from "../../lib/httpRequest";
+import { useQuery } from "@tanstack/react-query";
+import { postCacheKey } from "../../cache/postCacheKey";
+import { Ellipsis, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
+import { formatInstagramTime } from "../../lib/helper";
+import { cn } from "../../lib/utils";
 export type Post = {
   _id: string;
   userId: PostUser;
@@ -25,15 +31,62 @@ type PostDetailProps = {
   onSetOpenPostDetail: (open: boolean) => void;
 };
 
+type CommentUser = {
+  _id: string;
+  username: string;
+  profilePicture: string | null;
+};
+
+type Comment = {
+  _id: string;
+  postId: string;
+  userId: CommentUser;
+  content: string;
+  parentCommentId: string | null;
+  likes: number;
+  repliesCount: number;
+  createdAt: string;
+};
+
+type CommentPagination = {
+  currentPage: number;
+  totalPages: number;
+  totalComments: number;
+  hasMore: boolean;
+};
+
+type GetPostCommentsResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    comments: Comment[];
+    pagination: CommentPagination;
+  };
+};
+
+const getPostComment = async (
+  postId: string,
+): Promise<GetPostCommentsResponse> => {
+  const res = await instance.get<GetPostCommentsResponse>(
+    `/posts/${postId}/comments`,
+  );
+  return res.data;
+};
 export default function PostDetail({
   post,
   openPostDetail,
   onSetOpenPostDetail,
 }: PostDetailProps) {
+  const { data: comments } = useQuery({
+    queryKey: [postCacheKey.comment, post._id].flat(),
+    queryFn: () => getPostComment(post._id),
+    enabled: openPostDetail,
+  });
+  console.log("data nè", comments?.data.comments);
+
   return (
     <Dialog open={openPostDetail} onOpenChange={onSetOpenPostDetail}>
-      {/* <DialogTrigger>Open</DialogTrigger> */}
-      <DialogContent className="flex !max-w-[1000px] h-[80%] m-0 p-0 gap-0 border-0 overflow-hidden [&>button]:text-white">
+      <DialogContent className="flex !max-w-[1000px] h-[90%] m-0 p-0 gap-0 border-0 overflow-hidden [&>button]:text-white">
         <DialogTitle></DialogTitle>
         <div className="flex-1 flex items-center justify-center bg-black">
           {post.mediaType === "image" ? (
@@ -53,7 +106,98 @@ export default function PostDetail({
             ></video>
           )}
         </div>
-        <div className="flex-1 bg-[#212328]"></div>
+        <div className="flex-1 bg-[#212328]">
+          <div className="flex items-center justify-between gap-3 text-white mt-10 px-4 mb-7">
+            <div className="flex items-center gap-3">
+              <img
+                src="https://picsum.photos/200"
+                alt="user avatar"
+                className="w-9 h-9 rounded-full cursor-pointer object-cover"
+              />
+              <span className="font-bold cursor-pointer">
+                {post.userId?.username}
+              </span>
+            </div>
+            <Ellipsis className="cursor-pointer" />
+          </div>
+          <div className="px-4 max-h-96 h-full overflow-y-auto mb-5">
+            <div className="flex items-center justify-between gap-3 mb-7">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://picsum.photos/200"
+                    alt="user avatar"
+                    className="w-8 h-8 rounded-full cursor-pointer object-cover"
+                  />
+                  <span className="text-sm text-white font-semibold cursor-pointer">
+                    {post.userId?.username}
+                  </span>
+                </div>
+                <p className="text-white font-light">{post.caption}</p>
+              </div>
+            </div>
+            {comments?.data.comments.map((comment) => (
+              <div className="flex items-center justify-between gap-3 mb-7">
+                <div className="group">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src="https://picsum.photos/200"
+                        alt="user avatar"
+                        className="w-8 h-8 rounded-full cursor-pointer object-cover"
+                      />
+                      <span className="text-sm text-white font-semibold cursor-pointer">
+                        {comment.userId?.username}
+                      </span>
+                    </div>
+                    <p className="text-white font-light">{comment.content}</p>
+                  </div>
+                  <div className="flex gap-3 ml-12">
+                    <p className="text-gray-400 text-xs">
+                      {formatInstagramTime(comment.createdAt)}
+                    </p>
+                    <p className="text-gray-400 text-xs cursor-pointer">
+                      Trả lời
+                    </p>
+                  </div>
+                </div>
+                <Heart size={17} className="text-white cursor-pointer" />
+              </div>
+            ))}
+          </div>
+          <div className="mb-2">
+            <div className="text-white flex items-center justify-between px-4 mb-3">
+              <div className="text-white flex items-center gap-5">
+                <Heart
+                  className={cn(
+                    post.isLiked
+                      ? "text-red-500 fill-red-500 cursor-pointer"
+                      : "text-white cursor-pointer",
+                  )}
+                />
+                <MessageCircle />
+                <Send />
+              </div>
+              <Bookmark />
+            </div>
+            <p className="text-white text-sm px-4 mb-1">
+              {post.likes} lượt thích
+            </p>
+            <p className="text-gray-400 text-xs px-4">
+              {formatInstagramTime(post.createdAt)}
+            </p>
+          </div>
+          <form className="flex items-center px-2">
+            <input
+              type="text"
+              className="px-3 text-white w-full h-8 outline-none placeholder:text-sm"
+              placeholder="Bình luận..."
+            />
+            <button className="text-blue-500 font-bold cursor-pointer">
+              Đăng
+            </button>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
