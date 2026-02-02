@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 export type Post = {
   _id: string;
   userId: PostUser;
@@ -33,7 +33,8 @@ export default function PostDetail({
   return (
     <Dialog open={openPostDetail} onOpenChange={onSetOpenPostDetail}>
       {/* <DialogTrigger>Open</DialogTrigger> */}
-      <DialogContent className="flex !max-w-[1000px] h-[90%] m-0 p-0 gap-0 border-0 overflow-hidden [&>button]:text-white">
+      <DialogContent className="flex !max-w-[1000px] h-[80%] m-0 p-0 gap-0 border-0 overflow-hidden [&>button]:text-white">
+        <DialogTitle></DialogTitle>
         <div className="flex-1 flex items-center justify-center bg-black">
           {post.mediaType === "image" ? (
             <div className="max-w-full h-full">

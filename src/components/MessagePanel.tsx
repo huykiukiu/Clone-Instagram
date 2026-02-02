@@ -3,7 +3,7 @@ import { SquarePen } from "lucide-react";
 export default function MessagePanel() {
   const user = useAuth((state) => state.user);
   return (
-    <div className="min-h-dvh w-full max-w-80 border-r border-r-gray-800 py-9 px-4">
+    <div className="min-h-dvh w-full max-w-80 border-r border-r-gray-800 py-9 px-4 fixed">
       <div className="text-xl font-bold text-white mb-5 flex items-center justify-between">
         {user?.username} <SquarePen className="cursor-pointer" />
       </div>

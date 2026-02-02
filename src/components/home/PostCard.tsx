@@ -1,6 +1,7 @@
 import { Heart, MessageCircle, Send, Bookmark, Ellipsis } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postCacheKey } from "../../cache/postCacheKey";
+import { instance } from "../../lib/httpRequest";
 export type PostUser = {
   _id: string;
   username: string;
@@ -46,22 +47,26 @@ type LikePostResponse = {
     likes: number;
   };
 };
-import { useAuth } from "../../stores/authStore";
+// import { useAuth } from "../../stores/authStore";
 import { cn } from "../../lib/utils";
 import PostDetail from "./PostDetail";
 import { useState } from "react";
+// const likePostAPI = async (postId: string): Promise<LikePostResponse> => {
+//   const token = useAuth.getState().token;
+//   const response = await fetch(
+//     `${import.meta.env.VITE_BASE_URL}/api/posts/${postId}/like`,
+//     {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     },
+//   );
+//   return response.json();
+// };
 const likePostAPI = async (postId: string): Promise<LikePostResponse> => {
-  const token = useAuth.getState().token;
-  const response = await fetch(
-    `${import.meta.env.VITE_BASE_URL}/api/posts/${postId}/like`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-  return response.json();
+  const response = await instance.post(`/posts/${postId}/like`);
+  return response.data;
 };
 export default function PostCard({ data }: PostCardProps) {
   const [openPostId, setOpenPostId] = useState<string | null>(null);
@@ -97,14 +102,16 @@ export default function PostCard({ data }: PostCardProps) {
               <img
                 src={`${import.meta.env.VITE_BASE_URL}${post.image}`}
                 alt="post image"
-                className="max-w-full object-cover rounded-md"
+                className="max-w-full object-cover rounded-md cursor-pointer"
+                onClick={() => setOpenPostId(post._id)}
               />
             ) : (
               <video
                 src={`${import.meta.env.VITE_BASE_URL}${post.video}`}
                 autoPlay
                 muted
-                className="max-w-full object-cover rounded-md"
+                className="max-w-full object-cover rounded-md cursor-pointer"
+                onClick={() => setOpenPostId(post._id)}
               ></video>
             )}
           </div>
@@ -114,7 +121,7 @@ export default function PostCard({ data }: PostCardProps) {
                 <Heart
                   className={cn(
                     post.isLiked
-                      ? "text-red-500 cursor-pointer"
+                      ? "text-red-500 fill-red-500 cursor-pointer"
                       : "text-white cursor-pointer",
                   )}
                   onClick={() => mutation.mutate(post._id)}

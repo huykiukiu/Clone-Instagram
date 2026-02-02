@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { postCacheKey } from "../cache/postCacheKey";
 import PostCard from "../components/home/PostCard";
-
+import { instance } from "../lib/httpRequest";
 export type PostUser = {
   _id: string;
   username: string;
@@ -37,18 +37,21 @@ export type PostFeedResponse = {
   success: boolean;
 };
 
+// const getPosts = async (): Promise<PostFeedResponse> => {
+//   const response = await fetch(
+//     `${import.meta.env.VITE_BASE_URL}/api/posts/feed`,
+//   );
+//   return response.json();
+// };
 const getPosts = async (): Promise<PostFeedResponse> => {
-  const response = await fetch(
-    `${import.meta.env.VITE_BASE_URL}/api/posts/feed`,
-  );
-  return response.json();
+  const response = await instance.get("/posts/feed");
+  return response.data;
 };
 export default function Home() {
   const { data, isLoading } = useQuery({
     queryKey: postCacheKey.list,
     queryFn: getPosts,
   });
-  console.log(data?.data.posts);
   if (isLoading) return <div>Loading...</div>;
   if (!data) return null;
   return (
