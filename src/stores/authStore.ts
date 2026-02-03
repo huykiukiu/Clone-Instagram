@@ -7,7 +7,7 @@ type User = {
   id: string;
   email: string;
   username: string;
-  fullname: string;
+  fullName: string;
   gender: string;
   website: string;
   profilePicture: string | null;

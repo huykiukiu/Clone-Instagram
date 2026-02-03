@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { instance } from "../../lib/httpRequest";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { postCacheKey } from "../../cache/postCacheKey";
 import { Ellipsis, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 import { formatInstagramTime } from "../../lib/helper";
 import { cn } from "../../lib/utils";
+import { useState } from "react";
 export type Post = {
   _id: string;
   userId: PostUser;
@@ -29,6 +30,7 @@ type PostDetailProps = {
   post: Post;
   openPostDetail: boolean;
   onSetOpenPostDetail: (open: boolean) => void;
+  onLikePost: any;
 };
 
 type CommentUser = {
@@ -72,18 +74,65 @@ const getPostComment = async (
   );
   return res.data;
 };
+const createComment = async ({ postId, content, parentCommentId }) => {
+  const res = await instance.post(`/posts/${postId}/comments`, {
+    content,
+    parentCommentId,
+  });
+  return res.data;
+};
+const likeComment = async ({ postId, commentId }) => {
+  const res = await instance.post(
+    `/posts/${postId}/comments/${commentId}/like`,
+  );
+  return res.data;
+};
 export default function PostDetail({
   post,
   openPostDetail,
   onSetOpenPostDetail,
+  onLikePost,
 }: PostDetailProps) {
+  const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
+  const handleCreateComment = (e, postId: string) => {
+    e.preventDefault();
+    mutation.mutate({
+      postId: postId,
+      content: comment,
+      parentCommentId: null,
+    });
+  };
   const { data: comments } = useQuery({
     queryKey: [postCacheKey.comment, post._id].flat(),
     queryFn: () => getPostComment(post._id),
     enabled: openPostDetail,
   });
-  console.log("data nè", comments?.data.comments);
-
+  const likeCommentMutation = useMutation({
+    mutationFn: likeComment,
+    onSuccess: (data, variables) => {
+      console.log("like bình luận thành công");
+      queryClient.invalidateQueries({
+        queryKey: [`${postCacheKey.comment}`, variables.postId],
+      });
+    },
+    onError: (error) => {
+      console.log("like bình luận thất bại", error);
+    },
+  });
+  const mutation = useMutation({
+    mutationFn: createComment,
+    onSuccess: (data, variables) => {
+      console.log("Comment bài viết thành công");
+      queryClient.invalidateQueries({
+        queryKey: [`${postCacheKey.comment}`, variables.postId],
+      });
+      setComment("");
+    },
+    onError: () => {
+      console.log("Comment thất bại");
+    },
+  });
   return (
     <Dialog open={openPostDetail} onOpenChange={onSetOpenPostDetail}>
       <DialogContent className="flex !max-w-[1000px] h-[90%] m-0 p-0 gap-0 border-0 overflow-hidden [&>button]:text-white">
@@ -106,7 +155,7 @@ export default function PostDetail({
             ></video>
           )}
         </div>
-        <div className="flex-1 bg-[#212328]">
+        <div className="flex flex-col flex-1 bg-[#212328] py-3">
           <div className="flex items-center justify-between gap-3 text-white mt-10 px-4 mb-7">
             <div className="flex items-center gap-3">
               <img
@@ -120,7 +169,7 @@ export default function PostDetail({
             </div>
             <Ellipsis className="cursor-pointer" />
           </div>
-          <div className="px-4 max-h-96 h-full overflow-y-auto mb-5">
+          <div className="flex-1 px-4 overflow-y-auto mb-5">
             <div className="flex items-center justify-between gap-3 mb-7">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-3">
@@ -137,7 +186,10 @@ export default function PostDetail({
               </div>
             </div>
             {comments?.data.comments.map((comment) => (
-              <div className="flex items-center justify-between gap-3 mb-7">
+              <div
+                key={comment._id}
+                className="flex items-center justify-between gap-3 mb-7"
+              >
                 <div className="group">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-3">
@@ -161,7 +213,16 @@ export default function PostDetail({
                     </p>
                   </div>
                 </div>
-                <Heart size={17} className="text-white cursor-pointer" />
+                <Heart
+                  size={17}
+                  className="text-white cursor-pointer"
+                  onClick={() =>
+                    likeCommentMutation.mutate({
+                      postId: post._id,
+                      commentId: comment._id,
+                    })
+                  }
+                />
               </div>
             ))}
           </div>
@@ -174,6 +235,7 @@ export default function PostDetail({
                       ? "text-red-500 fill-red-500 cursor-pointer"
                       : "text-white cursor-pointer",
                   )}
+                  onClick={() => onLikePost.mutate(post._id)}
                 />
                 <MessageCircle />
                 <Send />
@@ -187,11 +249,16 @@ export default function PostDetail({
               {formatInstagramTime(post.createdAt)}
             </p>
           </div>
-          <form className="flex items-center px-2">
+          <form
+            onSubmit={(e) => handleCreateComment(e, post._id)}
+            className="flex items-center px-2"
+          >
             <input
               type="text"
               className="px-3 text-white w-full h-8 outline-none placeholder:text-sm"
               placeholder="Bình luận..."
+              onChange={(e) => setComment(e.target.value)}
+              value={comment}
             />
             <button className="text-blue-500 font-bold cursor-pointer">
               Đăng

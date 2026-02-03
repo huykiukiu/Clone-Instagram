@@ -103,7 +103,6 @@ export default function PostCard({ data }: PostCardProps) {
                 src={`${import.meta.env.VITE_BASE_URL}${post.image}`}
                 alt="post image"
                 className="max-w-full object-cover rounded-md cursor-pointer"
-                onClick={() => setOpenPostId(post._id)}
               />
             ) : (
               <video
@@ -111,7 +110,6 @@ export default function PostCard({ data }: PostCardProps) {
                 autoPlay
                 muted
                 className="max-w-full object-cover rounded-md cursor-pointer"
-                onClick={() => setOpenPostId(post._id)}
               ></video>
             )}
           </div>
@@ -148,7 +146,7 @@ export default function PostCard({ data }: PostCardProps) {
             post={post}
             openPostDetail={openPostId === post._id}
             onSetOpenPostDetail={() => setOpenPostId(null)}
-            // onLikePost={() => mutation.}
+            onLikePost={mutation}
           />
         </div>
       ))}

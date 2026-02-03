@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { postCacheKey } from "../cache/postCacheKey";
 import PostCard from "../components/home/PostCard";
 import { instance } from "../lib/httpRequest";
+import RightBar from "../components/RightBar";
 export type PostUser = {
   _id: string;
   username: string;
@@ -55,8 +56,11 @@ export default function Home() {
   if (isLoading) return <div>Loading...</div>;
   if (!data) return null;
   return (
-    <div className="flex-1 text-white px-10 py-9">
-      <PostCard data={data?.data.posts} />
+    <div className="flex-1 flex justify-center gap-32 text-white px-10 py-9">
+      <div>
+        <PostCard data={data?.data.posts} />
+      </div>
+      <RightBar />
     </div>
   );
 }

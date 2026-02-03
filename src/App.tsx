@@ -5,6 +5,7 @@ import AuthMiddleware from "./middlewares/AuthMiddleware";
 import PublicMiddleware from "./middlewares/PublicMiddleware";
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
+import ProfilePage from "./pages/ProfilePage";
 export default function App() {
   return (
     <div>
@@ -13,6 +14,7 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="explore" element={<Explore />} />
+            <Route path="user" element={<ProfilePage />} />
           </Route>
         </Route>
         <Route element={<PublicMiddleware />}>

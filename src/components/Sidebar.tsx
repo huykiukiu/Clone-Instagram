@@ -78,8 +78,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </NavLink>
-            <NavLink
-              to="/"
+            <button
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
               onClick={() => togglePanel("search")}
             >
@@ -93,7 +92,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                   <span>Tìm kiếm</span>
                 </>
               )}
-            </NavLink>
+            </button>
             <NavLink
               to="/explore"
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
@@ -110,7 +109,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
               )}
             </NavLink>
             <NavLink
-              to="/"
+              to="/message"
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
               onClick={() => togglePanel("message")}
             >
@@ -125,8 +124,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </NavLink>
-            <NavLink
-              to="/"
+            <button
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
               onClick={() => togglePanel("notification")}
             >
@@ -140,11 +138,8 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                   <span>Thông báo</span>
                 </>
               )}
-            </NavLink>
-            <NavLink
-              to="/"
-              className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
-            >
+            </button>
+            <button className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer">
               {activePanel ? (
                 <>
                   <SquarePlus />
@@ -155,9 +150,9 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                   <span>Tạo bài viết</span>
                 </>
               )}
-            </NavLink>
+            </button>
             <NavLink
-              to="/profile"
+              to="/user"
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
             >
               {activePanel ? (
