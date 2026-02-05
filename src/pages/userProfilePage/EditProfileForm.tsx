@@ -25,6 +25,7 @@ const updateProfile = async (formData: FormData) => {
 
 export default function EditProfileForm() {
   const user = useAuth((state) => state.user);
+  const updateUser = useAuth((state) => state.updateUser);
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: userCacheKey.userCurrentProfile,
@@ -57,7 +58,11 @@ export default function EditProfileForm() {
 
   const mutation = useMutation({
     mutationFn: updateProfile,
-    onSuccess: () => {
+    onSuccess: (response) => {
+      // Update authStore với dữ liệu mới từ response
+      if (response?.data) {
+        updateUser(response.data);
+      }
       queryClient.invalidateQueries({
         queryKey: userCacheKey.userCurrentProfile,
       });

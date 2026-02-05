@@ -19,6 +19,7 @@ type UserStore = {
   login: (data: LoginPayload) => Promise<void>;
   logout: () => Promise<void>;
   refreshAccessToken: () => Promise<RefreshTokenResponse | undefined>;
+  updateUser: (userData: Partial<User>) => void;
 };
 type RefreshTokenResponse = {
   success: boolean;
@@ -108,6 +109,14 @@ export const useAuth = create<UserStore>((set, get) => ({
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  },
+  updateUser: (userData: Partial<User>) => {
+    const currentUser = get().user;
+    if (currentUser) {
+      const updatedUser = { ...currentUser, ...userData };
+      set({ user: updatedUser });
+      localStorage.setItem("user", JSON.stringify(updatedUser));
     }
   },
 }));
