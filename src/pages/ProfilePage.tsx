@@ -2,7 +2,7 @@ import { Grid3x3, Bookmark, ListVideo } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userCacheKey } from "../cache/userCacheKey";
 import { instance } from "../lib/httpRequest";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../stores/authStore";
 import { Spinner } from "../components/ui/spinner";
 
@@ -121,15 +121,33 @@ export default function ProfilePage() {
       )}
       {/* end user action */}
       <div className="w-[70%] mx-auto text-white flex justify-around mb-3">
-        <Grid3x3 className="cursor-pointer" onClick={() => navigate("")} />
-        <Bookmark
-          className="cursor-pointer"
-          onClick={() => navigate("saved")}
-        />
-        <ListVideo
-          className="cursor-pointer"
-          onClick={() => navigate("videos")}
-        />
+        <NavLink
+          to=""
+          end
+          className={({ isActive }) =>
+            isActive ? "text-white" : "text-gray-500"
+          }
+        >
+          <Grid3x3 className="cursor-pointer" />
+        </NavLink>
+
+        <NavLink
+          to="saved"
+          className={({ isActive }) =>
+            isActive ? "text-white" : "text-gray-500"
+          }
+        >
+          <Bookmark className="cursor-pointer" />
+        </NavLink>
+
+        <NavLink
+          to="videos"
+          className={({ isActive }) =>
+            isActive ? "text-white" : "text-gray-500"
+          }
+        >
+          <ListVideo className="cursor-pointer" />
+        </NavLink>
       </div>
       <hr className="border-gray-800" />
       {/* end user post */}
