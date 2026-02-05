@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userCacheKey } from "../cache/userCacheKey";
 import UsersSearch from "./user/UsersSearch";
 import UsersHistory from "./user/UsersHistory";
+import { Spinner } from "./ui/spinner";
 
 const getSearchHistory = async () => {
   const res = await instance.get(`/search-history`);
@@ -46,7 +47,7 @@ export default function SearchPanel() {
     },
   });
 
-  const { data: history } = useQuery({
+  const { data: history, isLoading } = useQuery({
     queryKey: userCacheKey.usersHistory,
     queryFn: getSearchHistory,
   });

@@ -108,7 +108,7 @@ export default function PostCard({ data }: PostCardProps) {
               <img
                 src={`${import.meta.env.VITE_BASE_URL}${post.image}`}
                 alt="post image"
-                className="max-w-full object-cover rounded-md cursor-pointer"
+                className="w-full object-cover rounded-md cursor-pointer"
               />
             ) : (
               <video

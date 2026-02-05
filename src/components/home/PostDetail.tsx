@@ -7,6 +7,7 @@ import { formatInstagramTime } from "../../lib/helper";
 import { cn } from "../../lib/utils";
 import { useState } from "react";
 import { exploreCacheKey } from "../../cache/exploreCache";
+import { Spinner } from "../ui/spinner";
 export type Post = {
   _id: string;
   userId: PostUser;
@@ -104,7 +105,7 @@ export default function PostDetail({
       parentCommentId: null,
     });
   };
-  const { data: comments } = useQuery({
+  const { data: comments, isLoading } = useQuery({
     queryKey: [...postCacheKey.comment, post._id],
     queryFn: () => getPostComment(post._id),
     enabled: openPostDetail,
@@ -159,6 +160,7 @@ export default function PostDetail({
             ></video>
           )}
         </div>
+        {/* end media file post detail */}
         <div className="flex flex-col flex-1 bg-[#212328] py-3">
           <div className="flex items-center justify-between gap-3 text-white mt-10 px-4 mb-7">
             <div className="flex items-center gap-3">
@@ -189,7 +191,53 @@ export default function PostDetail({
                 <p className="text-white font-light">{post.caption}</p>
               </div>
             </div>
-            {comments?.data.comments.map((comment) => (
+            {/* end user and caption post detail */}
+            {isLoading ? (
+              <Spinner className="text-white w-10 h-10" />
+            ) : (
+              comments?.data.comments.map((comment) => (
+                <div
+                  key={comment._id}
+                  className="flex items-center justify-between gap-3 mb-7"
+                >
+                  <div className="group">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src="https://picsum.photos/200"
+                          alt="user avatar"
+                          className="w-8 h-8 rounded-full cursor-pointer object-cover"
+                        />
+                        <span className="text-sm text-white font-semibold cursor-pointer">
+                          {comment.userId?.username}
+                        </span>
+                      </div>
+                      <p className="text-white font-light">{comment.content}</p>
+                    </div>
+                    <div className="flex gap-3 ml-12">
+                      <p className="text-gray-400 text-xs">
+                        {formatInstagramTime(comment.createdAt)}
+                      </p>
+                      <p className="text-gray-400 text-xs cursor-pointer">
+                        Trả lời
+                      </p>
+                    </div>
+                  </div>
+                  <Heart
+                    size={17}
+                    className="text-white cursor-pointer"
+                    onClick={() =>
+                      likeCommentMutation.mutate({
+                        postId: post._id,
+                        commentId: comment._id,
+                      })
+                    }
+                  />
+                </div>
+              ))
+            )}
+
+            {/* {comments?.data.comments.map((comment) => (
               <div
                 key={comment._id}
                 className="flex items-center justify-between gap-3 mb-7"
@@ -228,7 +276,8 @@ export default function PostDetail({
                   }
                 />
               </div>
-            ))}
+            ))} */}
+            {/* end list post detail */}
           </div>
           <div className="mb-2">
             <div className="text-white flex items-center justify-between px-4 mb-3">
@@ -253,6 +302,7 @@ export default function PostDetail({
               {formatInstagramTime(post.createdAt)}
             </p>
           </div>
+          {/* end action post detail */}
           <form
             onSubmit={(e) => handleCreateComment(e, post._id)}
             className="flex items-center px-2"
@@ -268,6 +318,7 @@ export default function PostDetail({
               Đăng
             </button>
           </form>
+          {/* end input comment post detail */}
         </div>
       </DialogContent>
     </Dialog>

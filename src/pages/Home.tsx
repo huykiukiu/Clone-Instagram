@@ -3,6 +3,7 @@ import { postCacheKey } from "../cache/postCacheKey";
 import PostCard from "../components/home/PostCard";
 import { instance } from "../lib/httpRequest";
 import RightBar from "../components/RightBar";
+import { Spinner } from "../components/ui/spinner";
 export type PostUser = {
   _id: string;
   username: string;
@@ -53,7 +54,13 @@ export default function Home() {
     queryKey: postCacheKey.list,
     queryFn: getPosts,
   });
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="text-white absolute inset-0 top-1/2 left-1/2">
+        <Spinner className="w-16 h-16" />
+      </div>
+    );
+  }
   if (!data) return null;
   return (
     <div className="flex-1 flex justify-center gap-32 text-white px-10 py-9">
