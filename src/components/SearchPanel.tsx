@@ -92,9 +92,11 @@ export default function SearchPanel() {
               Xóa tất cả
             </p>
           </div>
-          {usersHistory?.map((item) => (
-            <UsersHistory key={item._id} history={item} searchQuery={value} />
-          ))}
+          <div className="search-block max-h-[500px] overflow-y-auto">
+            {usersHistory?.map((item) => (
+              <UsersHistory key={item._id} history={item} searchQuery={value} />
+            ))}
+          </div>
         </div>
       )}
 

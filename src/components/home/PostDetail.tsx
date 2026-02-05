@@ -138,6 +138,7 @@ export default function PostDetail({
       console.log("Comment thất bại");
     },
   });
+
   return (
     <Dialog open={openPostDetail} onOpenChange={onSetOpenPostDetail}>
       <DialogContent className="flex !max-w-[1000px] h-[90%] m-0 p-0 gap-0 border-0 overflow-hidden [&>button]:text-white">
@@ -209,7 +210,7 @@ export default function PostDetail({
                           className="w-8 h-8 rounded-full cursor-pointer object-cover"
                         />
                         <span className="text-sm text-white font-semibold cursor-pointer">
-                          {comment.userId?.username}
+                          {comment?.userId?.username}
                         </span>
                       </div>
                       <p className="text-white font-light">{comment.content}</p>

@@ -2,7 +2,7 @@ import { Grid3x3, Bookmark, ListVideo } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userCacheKey } from "../cache/userCacheKey";
 import { instance } from "../lib/httpRequest";
-import { useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../stores/authStore";
 import { Spinner } from "../components/ui/spinner";
 
@@ -19,7 +19,7 @@ const followUser = async (userId) => {
 export default function ProfilePage() {
   const myProfile = useAuth((state) => state.user);
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const { data: user, isLoading } = useQuery({
     queryKey: [...userCacheKey.userProfile, id],
     queryFn: () => getUserByID(id),
@@ -94,10 +94,10 @@ export default function ProfilePage() {
       {userData?.isFollowing ? (
         <div className="w-[70%] mx-auto flex gap-2 text-white mb-12">
           <button className="bg-[#25292E] flex-1 py-2 rounded-xl cursor-pointer">
-            Chỉnh sửa trang cá nhân
+            Đang theo dõi
           </button>
           <button className="bg-[#25292E] flex-1 py-2 rounded-xl cursor-pointer">
-            Xem kho lưu trữ
+            Gửi tin nhắn
           </button>
         </div>
       ) : myProfile?._id === userData._id ? (
@@ -121,12 +121,19 @@ export default function ProfilePage() {
       )}
       {/* end user action */}
       <div className="w-[70%] mx-auto text-white flex justify-around mb-3">
-        <Grid3x3 className="cursor-pointer" />
-        <Bookmark className="cursor-pointer" />
-        <ListVideo className="cursor-pointer" />
+        <Grid3x3 className="cursor-pointer" onClick={() => navigate("")} />
+        <Bookmark
+          className="cursor-pointer"
+          onClick={() => navigate("saved")}
+        />
+        <ListVideo
+          className="cursor-pointer"
+          onClick={() => navigate("videos")}
+        />
       </div>
       <hr className="border-gray-800" />
       {/* end user post */}
+      <Outlet />
     </div>
   );
 }

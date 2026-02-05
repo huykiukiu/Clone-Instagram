@@ -6,6 +6,10 @@ import PublicMiddleware from "./middlewares/PublicMiddleware";
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import ProfilePage from "./pages/ProfilePage";
+import { User } from "lucide-react";
+import UserAllPost from "./pages/userProfilePage/UserAllPost";
+import UserSavePost from "./pages/userProfilePage/UserSavePost";
+import UserAllVideo from "./pages/userProfilePage/UserAllVideo";
 export default function App() {
   return (
     <div>
@@ -14,7 +18,11 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="explore" element={<Explore />} />
-            <Route path="user/:id" element={<ProfilePage />} />
+            <Route path="user/:id" element={<ProfilePage />}>
+              <Route index element={<UserAllPost />} />
+              <Route path="saved" element={<UserSavePost />} />
+              <Route path="videos" element={<UserAllVideo />} />
+            </Route>
           </Route>
         </Route>
         <Route element={<PublicMiddleware />}>
