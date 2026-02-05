@@ -10,6 +10,7 @@ import { User } from "lucide-react";
 import UserAllPost from "./pages/userProfilePage/UserAllPost";
 import UserSavePost from "./pages/userProfilePage/UserSavePost";
 import UserAllVideo from "./pages/userProfilePage/UserAllVideo";
+import EditProfileForm from "./pages/userProfilePage/EditProfileForm";
 export default function App() {
   return (
     <div>
@@ -23,6 +24,7 @@ export default function App() {
               <Route path="saved" element={<UserSavePost />} />
               <Route path="videos" element={<UserAllVideo />} />
             </Route>
+            <Route path="profile" element={<EditProfileForm />} />
           </Route>
         </Route>
         <Route element={<PublicMiddleware />}>

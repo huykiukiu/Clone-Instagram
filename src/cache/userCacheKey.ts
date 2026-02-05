@@ -3,4 +3,5 @@ export const userCacheKey = {
   userProfile: ["user"],
   usersSearch: ["users-search"],
   usersHistory: ["users-history"],
+  userCurrentProfile: ["user-current"],
 };

@@ -5,6 +5,7 @@ import { instance } from "../lib/httpRequest";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../stores/authStore";
 import { Spinner } from "../components/ui/spinner";
+import EditProfileForm from "./userProfilePage/EditProfileForm";
 
 const getUserByID = async (id) => {
   const res = await instance.get(`/users/${id}`);
@@ -102,7 +103,10 @@ export default function ProfilePage() {
         </div>
       ) : myProfile?._id === userData._id ? (
         <div className="w-[70%] mx-auto flex gap-2 text-white mb-12">
-          <button className="bg-[#25292E] flex-1 py-2 rounded-xl cursor-pointer">
+          <button
+            className="bg-[#25292E] flex-1 py-2 rounded-xl cursor-pointer"
+            onClick={() => navigate("/profile")}
+          >
             Chỉnh sửa trang cá nhân
           </button>
           <button className="bg-[#25292E] flex-1 py-2 rounded-xl cursor-pointer">

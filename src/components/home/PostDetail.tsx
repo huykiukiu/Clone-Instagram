@@ -163,7 +163,7 @@ export default function PostDetail({
         </div>
         {/* end media file post detail */}
         <div className="flex flex-col flex-1 bg-[#212328] py-3">
-          <div className="flex items-center justify-between gap-3 text-white mt-10 px-4 mb-7">
+          <div className="flex items-center justify-between gap-3 text-white px-4 mb-5">
             <div className="flex items-center gap-3">
               <img
                 src="https://picsum.photos/200"
@@ -174,8 +174,10 @@ export default function PostDetail({
                 {post.userId?.username}
               </span>
             </div>
-            <Ellipsis className="cursor-pointer" />
+            {/* <Ellipsis className="cursor-pointer" /> */}
           </div>
+          <hr className="mb-7 border-gray-700" />
+
           <div className="flex-1 px-4 overflow-y-auto mb-5">
             <div className="flex items-center justify-between gap-3 mb-7">
               <div className="flex items-center gap-3">
