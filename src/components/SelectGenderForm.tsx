@@ -7,9 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function SelectGenderForm({ value }) {
+export default function SelectGenderForm({ value, onValueChange }) {
   return (
-    <Select value={value}>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Chọn giới tính" />
       </SelectTrigger>
