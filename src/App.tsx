@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import VerifyEmail from "./pages/VerifyEmail";
 import MainLayout from "./layouts/MainLayout";
 import AuthMiddleware from "./middlewares/AuthMiddleware";
 import PublicMiddleware from "./middlewares/PublicMiddleware";
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import ProfilePage from "./pages/ProfilePage";
-import { User } from "lucide-react";
 import UserAllPost from "./pages/userProfilePage/UserAllPost";
 import UserSavePost from "./pages/userProfilePage/UserSavePost";
 import UserAllVideo from "./pages/userProfilePage/UserAllVideo";
@@ -29,6 +30,8 @@ export default function App() {
         </Route>
         <Route element={<PublicMiddleware />}>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail />} />
         </Route>
       </Routes>
     </div>
