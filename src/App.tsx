@@ -14,7 +14,7 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="explore" element={<Explore />} />
-            <Route path="user" element={<ProfilePage />} />
+            <Route path="user/:id" element={<ProfilePage />} />
           </Route>
         </Route>
         <Route element={<PublicMiddleware />}>

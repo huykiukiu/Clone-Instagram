@@ -16,7 +16,6 @@ export default function Suggested() {
     queryKey: userCacheKey.suggestedUsers,
     queryFn: getSuggestedUsers,
   });
-  console.log(suggestedUser);
   return (
     <div>
       <div className="text-white flex justify-between mb-3">
@@ -26,6 +25,8 @@ export default function Suggested() {
       <div>
         {suggestedUser?.data.map((user) => (
           <UserSuggested
+            key={user._id}
+            userId={user._id}
             username={user.username}
             fullName={user.fullName}
             userPicture={user.profilePicture}

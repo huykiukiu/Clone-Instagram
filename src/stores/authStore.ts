@@ -4,7 +4,7 @@ type LoginPayload = {
   password: string;
 };
 type User = {
-  id: string;
+  _id: string;
   email: string;
   username: string;
   fullName: string;

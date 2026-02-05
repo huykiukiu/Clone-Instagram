@@ -6,6 +6,7 @@ import { Ellipsis, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 import { formatInstagramTime } from "../../lib/helper";
 import { cn } from "../../lib/utils";
 import { useState } from "react";
+import { exploreCacheKey } from "../../cache/exploreCache";
 export type Post = {
   _id: string;
   userId: PostUser;
@@ -104,7 +105,7 @@ export default function PostDetail({
     });
   };
   const { data: comments } = useQuery({
-    queryKey: [postCacheKey.comment, post._id].flat(),
+    queryKey: [...postCacheKey.comment, post._id],
     queryFn: () => getPostComment(post._id),
     enabled: openPostDetail,
   });
@@ -125,7 +126,10 @@ export default function PostDetail({
     onSuccess: (data, variables) => {
       console.log("Comment bài viết thành công");
       queryClient.invalidateQueries({
-        queryKey: [`${postCacheKey.comment}`, variables.postId],
+        queryKey: [...postCacheKey.comment, variables.postId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [postCacheKey.list],
       });
       setComment("");
     },

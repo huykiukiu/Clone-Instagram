@@ -1,4 +1,12 @@
-export default function UserSuggested({ username, fullName, userPicture }) {
+import { useNavigate } from "react-router-dom";
+
+export default function UserSuggested({
+  username,
+  fullName,
+  userPicture,
+  userId,
+}) {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-between items-center mb-3">
       <div className="flex gap-3 justify-between items-center">
@@ -11,6 +19,7 @@ export default function UserSuggested({ username, fullName, userPicture }) {
             }
             alt="user avatar"
             className="w-11 h-11 rounded-full object-cover select-none cursor-pointer"
+            onClick={() => navigate(`/user/${userId}`)}
           />
         </div>
         <div className="text-white text-sm">

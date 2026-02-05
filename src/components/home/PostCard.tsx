@@ -51,6 +51,7 @@ type LikePostResponse = {
 import { cn } from "../../lib/utils";
 import PostDetail from "./PostDetail";
 import { useState } from "react";
+import { formatInstagramTime } from "../../lib/helper";
 // const likePostAPI = async (postId: string): Promise<LikePostResponse> => {
 //   const token = useAuth.getState().token;
 //   const response = await fetch(
@@ -93,10 +94,15 @@ export default function PostCard({ data }: PostCardProps) {
                 className="w-9 h-9 rounded-full object-cover"
               />
               <span className="font-semibold">{post.userId?.username}</span>
+              <span className="text-gray-400">•</span>
+              <span className="text-xs text-gray-400">
+                {formatInstagramTime(post.createdAt)}
+              </span>
             </div>
 
             <Ellipsis className="cursor-pointer" />
           </div>
+          {/* End block 1 */}
           <div className="mb-3">
             {post.mediaType === "image" ? (
               <img
@@ -113,6 +119,7 @@ export default function PostCard({ data }: PostCardProps) {
               ></video>
             )}
           </div>
+          {/* End block 2 */}
           <div className="flex justify-between mb-2">
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
@@ -138,6 +145,7 @@ export default function PostCard({ data }: PostCardProps) {
             </div>
             <Bookmark className="text-white cursor-pointer" />
           </div>
+          {/* End block 3 */}
           <div className="text-white flex items-center gap-2">
             <span className="font-semibold">{post.userId?.username}</span>
             <p className="font-semibold">{post.caption}</p>

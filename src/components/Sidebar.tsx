@@ -15,8 +15,11 @@ type Props = {
 };
 import { useAuth } from "../stores/authStore";
 import UserMenu from "../components/UserMenu";
+import { CreatePost } from "./home/CreatePost";
+import { useState } from "react";
 export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
   const user = useAuth((state) => state.user);
+  const [openAddPostModal, setOpenAddPostModal] = useState(null);
   const togglePanel = (panel: SidebarPanel) => {
     if (activePanel === panel) {
       onSetActivePanel(null);
@@ -78,6 +81,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </NavLink>
+            {/* end home */}
             <button
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
               onClick={() => togglePanel("search")}
@@ -93,6 +97,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </button>
+            {/* end search */}
             <NavLink
               to="/explore"
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
@@ -108,6 +113,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </NavLink>
+            {/* end explore */}
             <NavLink
               to="/message"
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
@@ -124,6 +130,7 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </NavLink>
+            {/* end message */}
             <button
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
               onClick={() => togglePanel("notification")}
@@ -139,7 +146,11 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </button>
-            <button className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer">
+            {/* end notification */}
+            <button
+              className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
+              onClick={() => setOpenAddPostModal(true)}
+            >
               {activePanel ? (
                 <>
                   <SquarePlus />
@@ -151,8 +162,13 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </button>
+            <CreatePost
+              openAddPostModal={openAddPostModal}
+              onSetOpenPostModal={() => setOpenAddPostModal(false)}
+            />
+            {/* end create post */}
             <NavLink
-              to="/user"
+              to={`/user/${user?._id}`}
               className="text-white flex items-center gap-3 mb-2 hover:bg-gray-900 px-3 py-3 rounded-md cursor-pointer"
             >
               {activePanel ? (
@@ -174,11 +190,13 @@ export default function Sidebar({ activePanel, onSetActivePanel }: Props) {
                 </>
               )}
             </NavLink>
+            {/* end view profile */}
           </nav>
           <UserMenu
             activePanel={activePanel}
             onSetActivePanel={onSetActivePanel}
           />
+          {/* end action more */}
         </div>
       </div>
     </aside>
